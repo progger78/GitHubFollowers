@@ -8,7 +8,7 @@
 import UIKit
 
 class FollowersListVC: UIViewController {
-
+    
     enum Section { case main }
     
     var username: String
@@ -65,8 +65,14 @@ extension FollowersListVC {
             switch result {
             case .success(let followers):
                 if followers.count < 100 { self.hasMoreFollowers = false }
-                    self.followers.append(contentsOf: followers)
-                    self.updateData()
+                self.followers.append(contentsOf: followers)
+                if self.followers.isEmpty {
+                    let message = "User has no followers. Go follow them😜"
+                    DispatchQueue.main.async { self.showEmptyStateView(with: message, in: self.view) }
+                    return
+                }
+                self.updateData()
+                
             case .failure(let error):
                 print(error.rawValue)
                 self.presentGFAlertOnMainThread(title: "Something went wrong", message: error.rawValue, buttonTitle: "Got it")
@@ -78,7 +84,7 @@ extension FollowersListVC {
 
 // MARK: - Configure CollectionView
 extension FollowersListVC {
-   
+    
     
     private func configureCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UIHelper.createThreeColumnFlowLayout(in: view))
@@ -108,6 +114,7 @@ extension FollowersListVC {
 }
 
 
+// MARK: - CollectionView delegate
 extension FollowersListVC: UICollectionViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let offsetY = scrollView.contentOffset.y
@@ -120,4 +127,19 @@ extension FollowersListVC: UICollectionViewDelegate {
             getFollowers(for: username, page: page)
         }
     }
+}
+
+// MARK: - SearchContoller configuration
+extension FollowersListVC: UISearchResultsUpdating {
+    func createSearchViewController() {
+        let searchController = UISearchController()
+        searchController.searchBar.placeholder = "Search a user with username"
+        searchController.searchResultsUpdater = self
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        <#code#>
+    }
+    
+    
 }
