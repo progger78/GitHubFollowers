@@ -58,15 +58,15 @@ extension FollowersListVC {
     
     // MARK: - Network call
     private func getFollowers(for userName: String, page: Int ) {
+        showLoadingView()
         NetworkManager.shared.getFollowers(for: username, page: page) { [weak self] result in
             guard let self = self else { return }
+            dismissLoadingView()
             switch result {
             case .success(let followers):
                 if followers.count < 100 { self.hasMoreFollowers = false }
                     self.followers.append(contentsOf: followers)
                     self.updateData()
-           
-              
             case .failure(let error):
                 print(error.rawValue)
                 self.presentGFAlertOnMainThread(title: "Something went wrong", message: error.rawValue, buttonTitle: "Got it")
@@ -119,8 +119,5 @@ extension FollowersListVC: UICollectionViewDelegate {
             page += 1
             getFollowers(for: username, page: page)
         }
-        print("offset - \(offsetY)")
-        print("contentHeight - \(contentHeight)")
-        print("height - \(height)")
     }
 }
