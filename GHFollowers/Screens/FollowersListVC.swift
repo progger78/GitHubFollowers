@@ -13,6 +13,7 @@ class FollowersListVC: UIViewController {
     
     var username: String
     var followers: [Follower] = []
+    var filteredFollowers: [Follower] = []
     var page = 1
     var hasMoreFollowers = true
     
@@ -36,6 +37,7 @@ class FollowersListVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureViewController()
+        createSearchViewController()
         configureCollectionView()
         getFollowers(for: username, page: page)
         configureDataSource()
@@ -66,7 +68,7 @@ extension FollowersListVC {
             case .success(let followers):
                 if followers.count < 100 { self.hasMoreFollowers = false }
                     self.followers.append(contentsOf: followers)
-                    self.updateData()
+                self.updateData(on: self.followers)
             case .failure(let error):
                 print(error.rawValue)
                 self.presentGFAlertOnMainThread(title: "Something went wrong", message: error.rawValue, buttonTitle: "Got it")
@@ -99,7 +101,7 @@ extension FollowersListVC {
     }
     
     
-    private func updateData() {
+    private func updateData(on followers: [Follower]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Follower>()
         snapshot.appendSections([.main])
         snapshot.appendItems(followers)
@@ -107,8 +109,9 @@ extension FollowersListVC {
     }
 }
 
-
+// MARK: - CollectionView delegate
 extension FollowersListVC: UICollectionViewDelegate {
+    
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
@@ -121,3 +124,30 @@ extension FollowersListVC: UICollectionViewDelegate {
         }
     }
 }
+
+// MARK: - SearchContoller configuration
+extension FollowersListVC: UISearchResultsUpdating, UISearchBarDelegate {
+    
+    func createSearchViewController() {
+        let searchController = UISearchController()
+        searchController.searchBar.placeholder = "Search a user with username"
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController = searchController
+    }
+    
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let filter = searchController.searchBar.text, !filter.isEmpty else { return }
+        filteredFollowers = followers.filter {$0.login.lowercased().contains(filter.lowercased())}
+        updateData(on: filteredFollowers)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        updateData(on: self.followers)
+    }
+    
+    
+}
+    
