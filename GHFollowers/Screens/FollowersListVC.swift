@@ -61,6 +61,8 @@ extension FollowersListVC {
     private func configureViewController() {
         navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .systemBackground
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapPlusButton))
+        navigationItem.rightBarButtonItem = addButton
     }
     
     
@@ -83,6 +85,29 @@ extension FollowersListVC {
                 
             case .failure(let error):
                 print(error.rawValue)
+                self.presentGFAlertOnMainThread(title: "Something went wrong", message: error.rawValue, buttonTitle: "Got it")
+            }
+        }
+    }
+   
+    @objc func didTapPlusButton() {
+        showLoadingView()
+        NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
+            guard let self = self else { return }
+            dismissLoadingView()
+            
+            switch result {
+            case .success(let user):
+                let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
+                PersistanceManager.updateWith(favorite: favorite, actionType: .add) { error in
+                    guard let error = error else {
+                        self.presentGFAlertOnMainThread(title: "Success🤩", message: "You've succefully favorited this user!🎉", buttonTitle: "Perfect!")
+                        return
+                    }
+                    self.presentGFAlertOnMainThread(title: "Somthing went wrong", message: error.rawValue, buttonTitle: "Got it")
+                }
+                
+            case .failure(let error):
                 self.presentGFAlertOnMainThread(title: "Something went wrong", message: error.rawValue, buttonTitle: "Got it")
             }
         }
@@ -157,6 +182,7 @@ extension FollowersListVC: UISearchResultsUpdating, UISearchBarDelegate {
         searchController.searchBar.placeholder = "Search a user with username"
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
         navigationItem.searchController = searchController
     }
     
@@ -177,7 +203,7 @@ extension FollowersListVC: UISearchResultsUpdating, UISearchBarDelegate {
     
 }
 
-
+// MARK: -  Passing data for a particular user to show his followers
 extension FollowersListVC: FollowersListVCDelegate {
     
     func getFollowersRequest(for username: String) {
