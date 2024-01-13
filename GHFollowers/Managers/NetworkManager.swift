@@ -85,6 +85,7 @@ class NetworkManager {
                 let user = try decoder.decode(User.self, from: data)
                 completed(.success(user))
             } catch {
+                print("Decoding error: \(error)")
                 completed(.failure(.invalidData))
             }
         }

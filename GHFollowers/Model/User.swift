@@ -10,7 +10,7 @@ import Foundation
 
 struct User: Decodable {
     let login: String
-    let avaratarUrl: String
+    let avatarUrl: String
     var name: String?
     var location: String?
     var bio: String?
