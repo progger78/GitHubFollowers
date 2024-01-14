@@ -11,6 +11,7 @@ final class FavoritesVC: UIViewController {
     
     var favorites: [Follower] = []
     let tableView = UITableView()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,9 +100,6 @@ extension FavoritesVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         guard editingStyle == .delete else { return }
-        
-        
-
         
         let favorite = favorites[indexPath.row]
         

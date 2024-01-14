@@ -223,29 +223,4 @@ extension FollowersListVC: FollowersListVCDelegate {
     }
 }
 
-// MARK: - SearchContoller configuration
-extension FollowersListVC: UISearchResultsUpdating, UISearchBarDelegate {
-    
-    func createSearchViewController() {
-        let searchController = UISearchController()
-        searchController.searchBar.placeholder = "Search a user with username"
-        searchController.searchResultsUpdater = self
-        searchController.searchBar.delegate = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        navigationItem.searchController = searchController
-    }
-    
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        guard let filter = searchController.searchBar.text, !filter.isEmpty else { return }
-        filteredFollowers = followers.filter {$0.login.lowercased().contains(filter.lowercased())}
-        updateData(on: filteredFollowers)
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        updateData(on: self.followers)
-    }
-    
-    
-}
     
