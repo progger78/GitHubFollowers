@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 struct User: Decodable {
     let login: String
     let avatarUrl: String
@@ -19,5 +18,5 @@ struct User: Decodable {
     let htmlUrl: String
     let followers: Int
     let following: Int
-    let createdAt: String
+    let createdAt: Date
 }

@@ -7,11 +7,12 @@
 
 import UIKit
 
-class GFFavoriteCell: UITableViewCell {
-
+final class GFFavoriteCell: UITableViewCell {
+    
     static let reuseID = "GFFavoriteCell"
-    let avatarImageView = GFAvatarImageView(frame: .zero)
-    let userNameLabel = GFTitleLabel(textAlignment: .center, fontSize: 26)
+    private let avatarImageView = GFAvatarImageView(frame: .zero)
+    private let userNameLabel = GFTitleLabel(textAlignment: .center, fontSize: 26)
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -25,7 +26,7 @@ class GFFavoriteCell: UITableViewCell {
     
     
     func set(favorite: Follower) {
-        avatarImageView.downloadImage(with: favorite.avatarUrl)
+        avatarImageView.downloadImage(fromURL: favorite.avatarUrl)
         userNameLabel.text = favorite.login
     }
     
@@ -36,7 +37,6 @@ class GFFavoriteCell: UITableViewCell {
         backgroundColor = .systemBackground
         
         let padding: CGFloat = 14
-        
         
         avatarImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -49,8 +49,5 @@ class GFFavoriteCell: UITableViewCell {
             make.leading.equalTo(avatarImageView.snp.trailing).offset(padding)
             make.height.equalTo(40)
         }
-        
     }
-
-    
 }

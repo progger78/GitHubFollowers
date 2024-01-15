@@ -7,26 +7,23 @@
 
 import UIKit
 
-class GFAlertVC: UIViewController {
+final class GFAlertVC: UIViewController {
     
     private let containerView = GFContainerView()
     private let titleLabel = GFTitleLabel(textAlignment: .center, fontSize: 20)
     private let messageLabel = GFBodyLabel(textAlignment: .center)
     private let actionButton = GFButton(backgroundColor: .systemPink, title: "Ok")
     
-    private let padding: CGFloat = 20
-    
     var alertTitle: String?
     var message: String?
     var buttonTitle: String?
     
     
-    init(alertTitle: String, message: String, buttonTitle: String) {
+    init(alertTitle: String?, message: String?, buttonTitle: String?) {
         super.init(nibName: nil, bundle: nil)
         self.alertTitle = alertTitle
         self.buttonTitle = buttonTitle
         self.message = message
-        
     }
     
     
@@ -38,7 +35,6 @@ class GFAlertVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initialize()
-        
     }
 }
 
@@ -53,9 +49,8 @@ extension GFAlertVC {
     
     
     private func configureView() {
-        view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.75)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
     }
-    
     
     
     private func layoutSybviews() {
@@ -65,6 +60,8 @@ extension GFAlertVC {
     
     
     private func configureConstraints() {
+        let padding: CGFloat = 20
+        
         containerView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview()
@@ -88,20 +85,22 @@ extension GFAlertVC {
         }
     }
     
+    
     private func setUpElements() {
-        titleLabel.text = alertTitle ?? "Something went wrong"
+        titleLabel.text = alertTitle ?? Strings.Alert.standartTitle
         
-        messageLabel.text = message ?? "Unable to complete request"
+        messageLabel.text = message ??  Strings.Alert.standartMessage
         messageLabel.numberOfLines = 4
+        
+        buttonTitle = "Got it"
         
         actionButton.setTitle(buttonTitle ?? "Ok", for: .normal)
         actionButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
         
     }
     
+    
     @objc func dismissView() {
         dismiss(animated: true)
     }
-    
-    
 }

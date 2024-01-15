@@ -7,13 +7,13 @@
 
 import UIKit
 
-class GFFollowerCell: UICollectionViewCell {
-    
+final class GFFollowerCell: UICollectionViewCell {
     
     static let reuseID = "GFFollowerCell"
-    let avatarImageView = GFAvatarImageView(frame: .zero)
-    let userNameLabel = GFTitleLabel(textAlignment: .center, fontSize: 16)
-    let padding: CGFloat = 8
+    private let avatarImageView = GFAvatarImageView(frame: .zero)
+    private let userNameLabel = GFTitleLabel(textAlignment: .center, fontSize: 16)
+    private let padding: CGFloat = 8
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,12 +25,14 @@ class GFFollowerCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     func set(follower: Follower) {
         userNameLabel.text = follower.login
-        avatarImageView.downloadImage(with: follower.avatarUrl)
+        avatarImageView.downloadImage(fromURL: follower.avatarUrl)
     }
     
-    func configure() {
+    
+    private func configure() {
         addSubviews(avatarImageView, userNameLabel)
         
         avatarImageView.snp.makeConstraints { make in
@@ -45,5 +47,4 @@ class GFFollowerCell: UICollectionViewCell {
             make.height.equalTo(20)
         }
     }
-    
 }

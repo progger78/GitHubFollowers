@@ -14,13 +14,13 @@ enum InfoItemType: String {
     case followers = "Followers"
 }
 
-
 class GFInfoItemView: UIView {
-
+    
     let iconImageView = UIImageView()
     let titleLabel = GFTitleLabel(textAlignment: .left, fontSize: 14)
     let countLabel = GFTitleLabel(textAlignment: .center, fontSize: 14)
-   
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -35,14 +35,12 @@ class GFInfoItemView: UIView {
     
     private func configure() {
         addSubviews(iconImageView, titleLabel, countLabel)
-        
         iconImageView.contentMode = .scaleAspectFill
         iconImageView.tintColor = .label
     }
     
     
     private func configureConstraints() {
-     
         iconImageView.snp.makeConstraints { make in
             make.leading.top.equalToSuperview()
             make.height.width.equalTo(20)
@@ -62,24 +60,24 @@ class GFInfoItemView: UIView {
             make.height.equalTo(18)
         }
     }
-
+    
+    
     func set(infoItemType: InfoItemType, withCount count: Int) {
         let rawValue = infoItemType.rawValue
         switch infoItemType {
         case .repos:
-            iconImageView.image = UIImage(systemName: SFSymbols.folderIcon)
+            iconImageView.image = SFSymbols.reposIcon
             titleLabel.text = rawValue
         case .gists:
-            iconImageView.image = UIImage(systemName: SFSymbols.gistsIcon)
+            iconImageView.image = SFSymbols.gistsIcon
             titleLabel.text = rawValue
         case .following:
-            iconImageView.image = UIImage(systemName: SFSymbols.followingIcon)
+            iconImageView.image = SFSymbols.followingIcon
             titleLabel.text = rawValue
         case .followers:
-            iconImageView.image = UIImage(systemName: SFSymbols.followersIcon )
+            iconImageView.image = SFSymbols.followersIcon
             titleLabel.text = rawValue
         }
         countLabel.text = String(count)
-        
     }
 }

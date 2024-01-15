@@ -7,30 +7,27 @@
 
 import UIKit
 
-class GFEmptyStateView: UIView {
-
+final class GFEmptyStateView: UIView {
     
-    let messageLabel = GFTitleLabel(textAlignment: .center, fontSize: 28)
-    let logoImageView = UIImageView()
+    private let messageLabel = GFTitleLabel(textAlignment: .center, fontSize: 28)
+    private let logoImageView = UIImageView()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
-
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(message: String) {
-        super.init(frame: .zero)
+    
+    convenience init(message: String) {
+        self.init(frame: .zero)
         messageLabel.text = message
-        configure()
     }
-    
-    
-    
     
     
     func configure() {
@@ -40,7 +37,7 @@ class GFEmptyStateView: UIView {
         messageLabel.numberOfLines = 3
         messageLabel.textColor = .secondaryLabel
         
-        logoImageView.image = UIImage(named: "empty-state-logo")
+        logoImageView.image = Images.emptyStateLogo
         
         messageLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -55,5 +52,4 @@ class GFEmptyStateView: UIView {
             make.height.equalTo(self.snp.width).multipliedBy(1.3)
         }
     }
-
 }

@@ -7,11 +7,96 @@
 
 import UIKit
 
-
 enum SFSymbols {
-    static let folderIcon = "folder"
-    static let gistsIcon = "text.alignleft"
-    static let followingIcon = "heart.fill"
-    static let followersIcon = "person.2"
+    static let reposIcon     = UIImage(systemName:  "folder")
+    static let gistsIcon     = UIImage(systemName:  "text.alignleft")
+    static let followingIcon = UIImage(systemName:  "heart.fill")
+    static let followersIcon = UIImage(systemName:  "person.2")
+    static let locationPin   = UIImage(systemName:  "mappin.and.ellipse")
+}
+
+
+enum Strings {
+    enum TabBarTitle{
+        static let searchTitle         = "Search"
+        static let favoritesTitle      = "Favorites"
+    }
     
+    
+    enum ButtonTitle {
+        static let gitHubProfile       = "GitHub Profile"
+        static let getFollowers        = "Get followers"
+        static let perfect             = "Perfect!"
+    }
+    
+    
+    enum Alert {
+        static let standartTitle       = "Something went wrong"
+        static let standartMessage     = "Unable to complete request"
+        
+        static let noFollowersTitle    = "No followers"
+        static let noFollowersMessage  = "This user has no followers and it's sad"
+        static let noFollowersButton   = "Really sad"
+        
+        static let noFavoriteUsers     = "You have no favorite users, go follow them😉"
+        
+        static let success             = "Success🤩"
+        static let successAddToFavs    = "You've succefully favorited this user!🎉"
+        
+        
+        static let emptyUserTitle      = "Empty user"
+        static let emptyUserMessage    = "Enter a user name to understand who we are looking for😃"
+        
+        static let unableToDelete      = "Unable to delete"
+        
+        static let invalidGitHubLink   = "The url attached to this user is invalid"
+    }
+    
+    
+    enum UserInfo {
+        static let unselectedLocation  = "Location not selected"
+        static let notSpecifieddBio    = "Bio not available"
+    }
+    
+    
+    enum TextField {
+        static let usernamePlaceholder = "Enter a username"
+        static let usernameFilter      = "Search a user with username"
+    }
+}
+
+
+enum ScreenSize {
+    static let width        = UIScreen.main.bounds.size.width
+    static let height       = UIScreen.main.bounds.size.height
+    static let maxLength    = max(ScreenSize.width, ScreenSize.height)
+    static let minLength    = min(ScreenSize.width, ScreenSize.height)
+}
+
+
+enum Images {
+    static let ghLogo          =  UIImage(named: "gh-logo")
+    static let placeHolder     =  UIImage(named: "avatar-placeholder")
+    static let locationPin     =  UIImage(systemName: "mappin.and.ellipse")
+    static let emptyStateLogo  =  UIImage(named: "empty-state-logo")
+}
+
+
+enum DeviceTypes {
+    static let idiom                  = UIDevice.current.userInterfaceIdiom
+    static let nativeScale            = UIScreen.main.nativeScale
+    static let scale                  = UIScreen.main.scale
+    
+    static let isiPhoneSE             = idiom == .phone && ScreenSize.maxLength == 568.0
+    static let isiPhone8Standard      = idiom == .phone && ScreenSize.maxLength == 667.0 && nativeScale == scale
+    static let isiPhone8Zoomed        = idiom == .phone && ScreenSize.maxLength == 667.0 && nativeScale > scale
+    static let isiPhone8PlusStandard  = idiom == .phone && ScreenSize.maxLength == 736.0
+    static let isiPhone8PlusZoomed    = idiom == .phone && ScreenSize.maxLength == 736.0 && nativeScale < scale
+    static let isiPhoneX              = idiom == .phone && ScreenSize.maxLength == 812.0
+    static let isiPhoneXsMaxAndXr     = idiom == .phone && ScreenSize.maxLength == 896.0
+    static let isiPad                 = idiom == .pad && ScreenSize.maxLength >= 1024.0
+    
+    static func isiPhoneXAspectRatio() -> Bool {
+        return isiPhoneX || isiPhoneXsMaxAndXr
+    }
 }

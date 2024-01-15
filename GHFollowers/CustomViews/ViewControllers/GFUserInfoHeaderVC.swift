@@ -7,24 +7,24 @@
 
 import UIKit
 
-class GFUserInfoHeaderVC: UIViewController {
-
-    var avatarImage = GFAvatarImageView(frame: .zero)
-    var usernameLbel = GFTitleLabel(textAlignment: .left, fontSize: 34)
-    var nameLabel = GFSecondaryTitleLabel(fontSize: 18)
-    var locationImageView = UIImageView()
-    var locationLabel = GFSecondaryTitleLabel(fontSize: 18)
-    var bioLabel = GFBodyLabel(textAlignment: .left, numberOfLines: 3)
+final class GFUserInfoHeaderVC: UIViewController {
+    
+    private var avatarImage = GFAvatarImageView(frame: .zero)
+    private var usernameLbel = GFTitleLabel(textAlignment: .left, fontSize: 34)
+    private var nameLabel = GFSecondaryTitleLabel(fontSize: 18)
+    private var locationImageView = UIImageView()
+    private var locationLabel = GFSecondaryTitleLabel(fontSize: 18)
+    private var bioLabel = GFBodyLabel(textAlignment: .left, numberOfLines: 3)
     
     var user: User!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initialize()
         configure()
-
-
     }
+    
     
     init(user: User) {
         super.init(nibName: nil, bundle: nil)
@@ -32,40 +32,48 @@ class GFUserInfoHeaderVC: UIViewController {
         
     }
     
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
     private func configure() {
-        avatarImage.downloadImage(with: user.avatarUrl)
+        avatarImage.downloadImage(fromURL: user.avatarUrl)
         usernameLbel.text = user.login
         nameLabel.text = user.name ?? ""
-        locationImageView.image = UIImage(systemName: "mappin.and.ellipse")
+        locationImageView.image = SFSymbols.locationPin
         locationImageView.tintColor = .secondaryLabel
-        locationLabel.text = user.location ?? "Location not selected"
-        bioLabel.text = user.bio ?? "Bio not available"
-        
-        
+        locationLabel.text = user.location ?? Strings.UserInfo.unselectedLocation
+        bioLabel.text = user.bio ?? Strings.UserInfo.notSpecifieddBio
     }
     
-
+    
+    private func downloadImage(for username: String) {
+        NetworkManager.shared.downloadImage(with: username) { [weak self] image in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.avatarImage.image = image
+            }
+        }
+    }
 }
 
-
+// MARK: - UI Configuration
 extension GFUserInfoHeaderVC {
     
-    
-    func initialize() {
+    private func initialize() {
         layoutSubviews()
         configureConstraints()
-        
     }
     
-    func layoutSubviews() {
+    
+    private func layoutSubviews() {
         view.addSubviews(avatarImage, usernameLbel, nameLabel, locationImageView, locationLabel, bioLabel)
     }
     
-    func configureConstraints() {
+    
+    private func configureConstraints() {
         let padding: CGFloat = 20
         let textPadding: CGFloat = 12
         
@@ -84,8 +92,9 @@ extension GFUserInfoHeaderVC {
             make.top.equalTo(usernameLbel.snp.bottom).offset(4)
             make.leading.equalTo(avatarImage.snp.trailing).offset(textPadding)
             make.trailing.equalToSuperview().inset(padding)
-
+            
         }
+        
         locationImageView.snp.makeConstraints { make in
             make.bottom.equalTo(avatarImage.snp.bottom)
             make.leading.equalTo(avatarImage.snp.trailing).offset(textPadding)
@@ -96,13 +105,14 @@ extension GFUserInfoHeaderVC {
             make.centerY.equalTo(locationImageView.snp.centerY)
             make.leading.equalTo(locationImageView.snp.trailing).offset(5)
             make.trailing.equalToSuperview().inset(padding)
-
+            
         }
         
         bioLabel.snp.makeConstraints { make in
             make.top.equalTo(avatarImage.snp.bottom).offset(padding)
-            make.leading.trailing.equalToSuperview().inset(padding)
-            
+            make.leading.equalTo(avatarImage.snp.leading)
+            make.trailing.equalToSuperview()
+            make.height.equalTo(90)
         }
     }
 }

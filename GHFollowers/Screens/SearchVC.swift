@@ -10,52 +10,45 @@ import SnapKit
 
 final class SearchVC: UIViewController {
     
+    private let logoImageView = UIImageView()
+    private let userNameTextField = GFTextField()
+    private let callToActionButton = GFButton(backgroundColor: .systemGreen, title: Strings.ButtonTitle.getFollowers)
+    private var isUsernNameEntered: Bool { return !userNameTextField.text!.isEmpty }
     
-    let logoImageView = UIImageView()
-    let userNameTextField = GFTextField()
-    let callToActionButton = GFButton(backgroundColor: .systemGreen, title: "Get followers")
-    var isUsernNameEntered: Bool { return !userNameTextField.text!.isEmpty }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initialize()
-        
-        
-        
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        userNameTextField.text = ""
         navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
+    
     private func createDismissKeyboardTapGesture() {
-        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:)))
         view.addGestureRecognizer(tap)
     }
     
+
     @objc func pushFollowerListVC() {
         guard isUsernNameEntered else {
-            presentGFAlertOnMainThread(title: "Empty user",
-                                       message: "Input a user name to understand who we are looking for 😃",
-                                       buttonTitle: "Got it")
-            return
-        }
+            presentGFAlertOnMainThread(title: Strings.Alert.emptyUserTitle, message: Strings.Alert.emptyUserMessage, buttonTitle: nil)
+            return }
         let username = userNameTextField.text!
         let followersListVC = FollowersListVC(username: username)
-        followersListVC.title = username
-       
+        
+        userNameTextField.resignFirstResponder()
         navigationController?.pushViewController(followersListVC, animated: true)
     }
-    
-    
 }
 
-
 // MARK: - Set up UI
-
 extension SearchVC {
-    
     
     private func initialize() {
         configureView()
@@ -64,17 +57,16 @@ extension SearchVC {
         configureCallToActionButton()
     }
     
+    
     private func configureView() {
         view.backgroundColor = .systemBackground
         createDismissKeyboardTapGesture()
         userNameTextField.delegate = self
-        
-        
     }
     
     
     private func configureLogoView() {
-        logoImageView.image = UIImage(named: "gh-logo")
+        logoImageView.image = Images.ghLogo
     }
     
     
@@ -91,17 +83,15 @@ extension SearchVC {
     
     private func configureConstraints() {
         logoImageView.snp.makeConstraints {
+            $0.centerY.equalToSuperview().dividedBy(1.5)
             $0.width.height.equalTo(200)
             $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().dividedBy(1.5)
-            
         }
         
         userNameTextField.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(40)
-            $0.top.equalTo(logoImageView.snp_bottomMargin).inset(-40)
+            $0.top.equalTo(logoImageView.snp_bottomMargin).offset(40)
             $0.height.equalTo(50)
-            
         }
         
         callToActionButton.snp.makeConstraints {
@@ -113,6 +103,7 @@ extension SearchVC {
 }
 
 extension SearchVC: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         pushFollowerListVC()
         return true

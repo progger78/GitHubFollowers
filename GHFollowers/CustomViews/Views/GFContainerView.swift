@@ -7,19 +7,17 @@
 
 import UIKit
 
-class GFContainerView: UIView {
-
+final class GFContainerView: UIView {
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configire()
-        
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
     
     private func configire() {
         backgroundColor = .systemBackground
@@ -32,9 +30,4 @@ class GFContainerView: UIView {
             make.width.equalTo(280)
         }
     }
-    
-    
-    
-    
-
 }

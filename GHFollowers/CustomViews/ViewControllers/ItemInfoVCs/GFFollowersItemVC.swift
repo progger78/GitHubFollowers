@@ -5,13 +5,26 @@
 //  Created by 1 on 13.01.2024.
 //
 
-import Foundation
-
 
 import UIKit
 
+protocol GFFollowersItemVCDelegate: AnyObject {
+    func didTapGetFollowers(for user: User)
+}
 
-class GFFollowersItemVC: GFItemInfoVC {
+final class GFFollowersItemVC: GFItemInfoVC {
+    
+    weak var delegate: GFFollowersItemVCDelegate?
+    
+    init(user: User, delegate: GFFollowersItemVCDelegate) {
+        self.delegate = delegate
+        super.init(user: user)
+    }
+    
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     
     override func viewDidLoad() {
@@ -19,11 +32,13 @@ class GFFollowersItemVC: GFItemInfoVC {
         configureItems()
     }
     
+    
     private func configureItems() {
         infoItemViewOne.set(infoItemType: .following, withCount: user.following)
         infoItemViewTwo.set(infoItemType: .followers, withCount: user.followers)
-        actionButton.set(backgroundColor: .systemGreen, title: "Get followers")
+        actionButton.set(backgroundColor: .systemGreen, title: Strings.ButtonTitle.getFollowers)
     }
+    
     
     override func didTapActionButton() {
         delegate?.didTapGetFollowers(for: user)

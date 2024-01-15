@@ -14,12 +14,14 @@ class GFTextField: UITextField {
         configure()
     }
     
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     
     private func configure() {
+        placeholder = Strings.TextField.usernamePlaceholder
         
         layer.cornerRadius = 10
         layer.borderWidth = 2
@@ -27,13 +29,14 @@ class GFTextField: UITextField {
         
         textColor = .label
         tintColor = .label
+        backgroundColor = .tertiarySystemBackground
+        
         textAlignment = .center
         font = UIFont.preferredFont(forTextStyle: .title2)
         adjustsFontSizeToFitWidth = true
         
-        backgroundColor = .tertiarySystemBackground
         autocorrectionType = .no
         returnKeyType = .go
-        placeholder = "Enter a username"
+        clearButtonMode = .whileEditing
     }
 }
