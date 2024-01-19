@@ -72,7 +72,7 @@ extension FollowersListVC {
             case .success(let followers):
                 self.updateUi(with: followers)
             case .failure(let error):
-                self.presentGFAlertOnMainThread(title: nil, message: error.rawValue, buttonTitle: nil)
+                self.presentGFAlertOnMainThread(message: error.rawValue)
             }
             isLoadingMoreFollowers = false
         }
@@ -102,7 +102,7 @@ extension FollowersListVC {
             case .success(let user):
                 addUserToFavorites(user: user)
             case .failure(let error):
-                self.presentGFAlertOnMainThread(title: nil, message: error.rawValue, buttonTitle: nil)
+                self.presentGFAlertOnMainThread(message: error.rawValue)
             }
         }
     }
@@ -115,7 +115,7 @@ extension FollowersListVC {
                 self.presentGFAlertOnMainThread(title: Strings.Alert.success, message: Strings.Alert.successAddToFavs , buttonTitle: Strings.ButtonTitle.perfect)
                 return
             }
-            self.presentGFAlertOnMainThread(title: nil, message: error.rawValue, buttonTitle: nil)
+            self.presentGFAlertOnMainThread(message: error.rawValue)
         }
     }
 }
@@ -134,8 +134,9 @@ extension FollowersListVC {
     
     private func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, Follower>(collectionView: collectionView, cellProvider: { collectionView, indexPath, follower -> UICollectionViewCell? in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GFFollowerCell.reuseID, for: indexPath) as? GFFollowerCell
-            cell?.set(follower: follower)
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GFFollowerCell.reuseID, for: indexPath) as? GFFollowerCell else
+            { return UICollectionViewCell() }
+            cell.set(follower: follower)
             return cell
         })
     }

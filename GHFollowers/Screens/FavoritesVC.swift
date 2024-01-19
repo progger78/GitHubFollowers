@@ -40,7 +40,7 @@ final class FavoritesVC: UIViewController {
                 }
                 
             case .failure(let error):
-                self.presentGFAlertOnMainThread(title: nil, message: error.rawValue, buttonTitle: nil)
+                self.presentGFAlertOnMainThread(message: error.rawValue)
             }
         }
     }
@@ -109,7 +109,7 @@ extension FavoritesVC: UITableViewDataSource, UITableViewDelegate {
                 favorites.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .left)
                 return }
-            presentGFAlertOnMainThread(title: Strings.Alert.unableToDelete, message: error.rawValue, buttonTitle: nil)
+            presentGFAlertOnMainThread(title: Strings.Alert.unableToDelete, message: error.rawValue)
         }
     }
 }

@@ -13,6 +13,10 @@ enum SFSymbols {
     static let followingIcon = UIImage(systemName:  "heart.fill")
     static let followersIcon = UIImage(systemName:  "person.2")
     static let locationPin   = UIImage(systemName:  "mappin.and.ellipse")
+    static let searchImage   = UIImage(systemName:  "magnifyingglass.circle")
+    static let checkmark     = UIImage(systemName:  "checkmark")
+    
+    
 }
 
 

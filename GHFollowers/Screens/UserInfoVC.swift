@@ -51,7 +51,7 @@ final class UserInfoVC: GFDataLoadingVC {
             case .success(let user):
                 DispatchQueue.main.async { self.configureUIElements(with: user) }
             case .failure(let error):
-                self.presentGFAlertOnMainThread(title: nil, message: error.rawValue, buttonTitle: "Ok")
+                self.presentGFAlertOnMainThread(message: error.rawValue)
             }
         }
     }
@@ -130,7 +130,7 @@ extension UserInfoVC: GFReposItemVCDelegate {
     
     func didTapGitHubProfile(for user: User) {
         guard let url = URL(string: user.htmlUrl) else {
-            presentGFAlertOnMainThread(title: nil, message: Strings.Alert.invalidGitHubLink, buttonTitle: nil)
+            presentGFAlertOnMainThread(message: Strings.Alert.invalidGitHubLink)
             return
         }
         presentSafariController(with: url)
@@ -140,7 +140,7 @@ extension UserInfoVC: GFReposItemVCDelegate {
 extension UserInfoVC: GFFollowersItemVCDelegate {
     
     func didTapGetFollowers(for user: User) {
-        guard user.followers != 0 else { presentGFAlertOnMainThread(title: Strings.Alert.noFollowersTitle , message: Strings.Alert.noFollowersMessage, buttonTitle:  Strings.Alert.noFollowersButton)
+        guard user.followers != 0 else { presentGFAlertOnMainThread(title: Strings.Alert.noFollowersTitle , message: Strings.Alert.noFollowersMessage, buttonTitle: Strings.Alert.noFollowersButton)
             return
         }
         delegate?.getFollowersRequest(for: user.login)

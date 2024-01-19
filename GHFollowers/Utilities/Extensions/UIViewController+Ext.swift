@@ -10,7 +10,7 @@ import SafariServices
 
 extension UIViewController {
     
-    func presentGFAlertOnMainThread(title: String?, message: String?, buttonTitle: String?) {
+    func presentGFAlertOnMainThread(title: String? = nil, message: String?, buttonTitle: String? = nil) {
         DispatchQueue.main.async {
             let alertVC = GFAlertVC(alertTitle: title, message: message, buttonTitle: buttonTitle)
             alertVC.modalPresentationStyle = .overFullScreen
