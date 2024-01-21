@@ -34,10 +34,10 @@ final class SearchVC: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-
+    
     @objc func pushFollowerListVC() {
         guard isUsernNameEntered else {
-            presentGFAlertOnMainThread(title: Strings.Alert.emptyUserTitle, message: Strings.Alert.emptyUserMessage)
+            presentGFAlert(title: Strings.Alert.emptyUserTitle, message: Strings.Alert.emptyUserMessage)
             return }
         let username = userNameTextField.text!
         let followersListVC = FollowersListVC(username: username)

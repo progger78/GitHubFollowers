@@ -12,12 +12,17 @@ final class GFFavoriteCell: UITableViewCell {
     static let reuseID = "GFFavoriteCell"
     private let avatarImageView = GFAvatarImageView(frame: .zero)
     private let userNameLabel = GFTitleLabel(textAlignment: .center, fontSize: 26)
-    private var path: String?
     
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
+    }
+    
+    
+    override func prepareForReuse() {
+        avatarImageView.image = nil
+        userNameLabel.text = nil
     }
     
     
@@ -27,7 +32,6 @@ final class GFFavoriteCell: UITableViewCell {
     
     
     func set(favorite: Follower) {
-        self.path = favorite.avatarUrl
         avatarImageView.downloadImage(fromURL: favorite.avatarUrl)
         userNameLabel.text = favorite.login
     }

@@ -45,13 +45,12 @@ final class UserInfoVC: GFDataLoadingVC {
     
     
     private func getUserInfo() {
-        NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let user):
-                DispatchQueue.main.async { self.configureUIElements(with: user) }
-            case .failure(let error):
-                self.presentGFAlertOnMainThread(message: error.rawValue)
+        Task {
+            do {
+                let user = try await NetworkManager.shared.getUserInfo(for: username)
+                configureUIElements(with: user)
+            } catch {
+                if let gfError = error as? GFError { presentGFAlert(message: gfError.rawValue) } else { presentDefaultError() }
             }
         }
     }
@@ -130,7 +129,7 @@ extension UserInfoVC: GFReposItemVCDelegate {
     
     func didTapGitHubProfile(for user: User) {
         guard let url = URL(string: user.htmlUrl) else {
-            presentGFAlertOnMainThread(message: Strings.Alert.invalidGitHubLink)
+            presentGFAlert(message: Strings.Alert.invalidGitHubLink)
             return
         }
         presentSafariController(with: url)
@@ -140,7 +139,7 @@ extension UserInfoVC: GFReposItemVCDelegate {
 extension UserInfoVC: GFFollowersItemVCDelegate {
     
     func didTapGetFollowers(for user: User) {
-        guard user.followers != 0 else { presentGFAlertOnMainThread(title: Strings.Alert.noFollowersTitle , message: Strings.Alert.noFollowersMessage, buttonTitle: Strings.Alert.noFollowersButton)
+        guard user.followers != 0 else { presentGFAlert(title: Strings.Alert.noFollowersTitle , message: Strings.Alert.noFollowersMessage, buttonTitle: Strings.Alert.noFollowersButton)
             return
         }
         delegate?.getFollowersRequest(for: user.login)

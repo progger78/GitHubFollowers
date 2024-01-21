@@ -47,16 +47,6 @@ final class GFUserInfoHeaderVC: UIViewController {
         locationLabel.text = user.location ?? Strings.UserInfo.unselectedLocation
         bioLabel.text = user.bio ?? Strings.UserInfo.notSpecifieddBio
     }
-    
-    
-    private func downloadImage(for username: String) {
-        NetworkManager.shared.downloadImage(with: username) { [weak self] image in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.avatarImage.image = image
-            }
-        }
-    }
 }
 
 // MARK: - UI Configuration
@@ -111,7 +101,7 @@ extension GFUserInfoHeaderVC {
         bioLabel.snp.makeConstraints { make in
             make.top.equalTo(avatarImage.snp.bottom).offset(padding)
             make.leading.equalTo(avatarImage.snp.leading)
-            make.trailing.equalToSuperview()
+            make.trailing.equalToSuperview().offset(padding)
             make.height.equalTo(90)
         }
     }

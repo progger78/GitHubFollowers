@@ -38,13 +38,12 @@ final class FavoritesVC: UIViewController {
                 else {
                     updateTableView(with: favorites)
                 }
-                
             case .failure(let error):
-                self.presentGFAlertOnMainThread(message: error.rawValue)
+                self.presentGFAlert(message: error.rawValue)
             }
         }
     }
-
+    
     
     private func updateTableView(with favorites: [Follower]) {
         self.favorites = favorites
@@ -53,7 +52,7 @@ final class FavoritesVC: UIViewController {
             self.view.bringSubviewToFront(self.tableView)
         }
     }
-
+    
     
     private func configureView() {
         view.backgroundColor = .systemBackground
@@ -105,11 +104,16 @@ extension FavoritesVC: UITableViewDataSource, UITableViewDelegate {
         PersistanceManager.updateWith(favorite: favorites[indexPath.row], actionType: .remove) { [weak self] error in
             guard let self = self else { return }
             
-            guard let error = error else { 
+            guard let error = error else {
                 favorites.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .left)
+                if favorites.count == 0 { DispatchQueue.main.async { 
+                    UIView.animate(withDuration: 0.3) {
+                        self.showEmptyStateView(with: Strings.Alert.noFavoriteUsers, in: self.view) }
+                    }
+                }
                 return }
-            presentGFAlertOnMainThread(title: Strings.Alert.unableToDelete, message: error.rawValue)
+            self.presentGFAlert(title: Strings.Alert.unableToDelete, message: error.rawValue)
         }
     }
 }

@@ -62,17 +62,15 @@ extension FollowersListVC {
     }
     
     
-    private func getFollowers(for userName: String, page: Int ) {
+    private func getFollowers(for username: String, page: Int ) {
         showLoadingView()
         isLoadingMoreFollowers = true
-        NetworkManager.shared.getFollowers(for: username, page: page) { [weak self] result in
-            guard let self = self else { return }
-            dismissLoadingView()
-            switch result {
-            case .success(let followers):
-                self.updateUi(with: followers)
-            case .failure(let error):
-                self.presentGFAlertOnMainThread(message: error.rawValue)
+        Task {
+            do { let followers = try await NetworkManager.shared.getFollowers(for: username, page: page)
+                 updateUi(with: followers)
+                 dismissLoadingView()
+            } catch {
+                if let gfEror = error as? GFError { presentAsyncGFAlert(message: GFError.invalidData.rawValue) } else { presentDefaultError() }
             }
             isLoadingMoreFollowers = false
         }
@@ -86,39 +84,41 @@ extension FollowersListVC {
             let message = Strings.Alert.noFollowersMessage
             DispatchQueue.main.async { self.showEmptyStateView(with: message, in: self.view) }
             return
-        }
-        self.updateData(on: self.followers)
-        
+        } 
+        updateData(on: self.followers)
     }
     
     
     @objc func didTapPlusButton() {
         showLoadingView()
-        NetworkManager.shared.getUserInfo(for: username) { [weak self] result in
-            guard let self = self else { return }
-            dismissLoadingView()
-            
-            switch result {
-            case .success(let user):
+        Task {
+            do {
+                let user = try await NetworkManager.shared.getUserInfo(for: username)
                 addUserToFavorites(user: user)
-            case .failure(let error):
-                self.presentGFAlertOnMainThread(message: error.rawValue)
+//                dismissLoadingView()
+                
+            } catch {
+                guard let gfError = error as? GFError else { return }
+                presentAsyncGFAlert(message: gfError.rawValue)
             }
+            dismissLoadingView()
         }
     }
     
     
     private func addUserToFavorites(user: User) {
         let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
-        PersistanceManager.updateWith(favorite: favorite, actionType: .add) { error in
+        PersistanceManager.updateWith(favorite: favorite, actionType: .add) { [weak self] error in
+            guard let self = self else { return }
             guard let error = error else {
-                self.presentGFAlertOnMainThread(title: Strings.Alert.success, message: Strings.Alert.successAddToFavs , buttonTitle: Strings.ButtonTitle.perfect)
+                self.presentGFAlert(title: Strings.Alert.success, message: Strings.Alert.successAddToFavs , buttonTitle: Strings.ButtonTitle.perfect)
                 return
             }
-            self.presentGFAlertOnMainThread(message: error.rawValue)
+            self.presentGFAlert(message: error.rawValue)
         }
     }
 }
+    
 
 // MARK: - Configure CollectionView
 extension FollowersListVC {

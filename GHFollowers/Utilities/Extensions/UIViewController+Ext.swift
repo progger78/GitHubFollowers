@@ -10,14 +10,29 @@ import SafariServices
 
 extension UIViewController {
     
-    func presentGFAlertOnMainThread(title: String? = nil, message: String?, buttonTitle: String? = nil) {
+    
+    func presentAsyncGFAlert(title: String? = nil, message: String?, buttonTitle: String? = nil) {
+        let alertVC = GFAlertVC(alertTitle: title, message: message, buttonTitle: buttonTitle)
+        alertVC.modalPresentationStyle = .overFullScreen
+        alertVC.modalTransitionStyle = .crossDissolve
+        present(alertVC, animated: true)
+    }
+    
+    func presentGFAlert(title: String? = nil, message: String?, buttonTitle: String? = nil) {
         DispatchQueue.main.async {
             let alertVC = GFAlertVC(alertTitle: title, message: message, buttonTitle: buttonTitle)
             alertVC.modalPresentationStyle = .overFullScreen
             alertVC.modalTransitionStyle = .crossDissolve
             self.present(alertVC, animated: true)
         }
-        
+    }
+    
+    
+    func presentDefaultError() {
+        let alertVC = GFAlertVC(alertTitle: "Unable to complete", message: GFError.unableToComplete.rawValue, buttonTitle: nil)
+        alertVC.modalPresentationStyle = .overFullScreen
+        alertVC.modalTransitionStyle = .crossDissolve
+        present(alertVC, animated: true)
     }
     
     
@@ -34,3 +49,4 @@ extension UIViewController {
         present(safariController, animated: true)
     }
 }
+
