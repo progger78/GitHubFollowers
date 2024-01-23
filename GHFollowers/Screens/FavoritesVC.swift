@@ -28,7 +28,7 @@ final class FavoritesVC: UIViewController {
     
     private func getFavorites() {
         PersistanceManager.retrieveFavorites { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch result {
             case .success(let favorites):
@@ -102,16 +102,12 @@ extension FavoritesVC: UITableViewDataSource, UITableViewDelegate {
         guard editingStyle == .delete else { return }
         
         PersistanceManager.updateWith(favorite: favorites[indexPath.row], actionType: .remove) { [weak self] error in
-            guard let self = self else { return }
+            guard let self else { return }
             
-            guard let error = error else {
+            guard let error else {
                 favorites.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .left)
-                if favorites.isEmpty { DispatchQueue.main.async { 
-                    UIView.animate(withDuration: 0.3) {
-                        self.showEmptyStateView(with: Strings.Alert.noFavoriteUsers, in: self.view) }
-                    }
-                }
+                if favorites.isEmpty { self.showEmptyStateView(with: Strings.Alert.noFavoriteUsers, in: self.view) }
                 return }
             self.presentGFAlert(title: Strings.Alert.unableToDelete, message: error.rawValue)
         }

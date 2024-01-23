@@ -70,7 +70,7 @@ extension FollowersListVC {
                  updateUi(with: followers)
                  dismissLoadingView()
             } catch {
-                if let gfEror = error as? GFError { presentAsyncGFAlert(message: GFError.invalidData.rawValue) } else { presentDefaultError() }
+                if let gfEror = error as? GFError { presentAsyncGFAlert(message: gfEror.rawValue) } else { presentDefaultError() }
             }
             isLoadingMoreFollowers = false
         }
@@ -109,8 +109,8 @@ extension FollowersListVC {
     private func addUserToFavorites(user: User) {
         let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
         PersistanceManager.updateWith(favorite: favorite, actionType: .add) { [weak self] error in
-            guard let self = self else { return }
-            guard let error = error else {
+            guard let self else { return }
+            guard let error else {
                 self.presentGFAlert(title: Strings.Alert.success, message: Strings.Alert.successAddToFavs , buttonTitle: Strings.ButtonTitle.perfect)
                 return
             }
@@ -159,7 +159,7 @@ extension FollowersListVC: UICollectionViewDelegate {
         let height = scrollView.frame.size.height
         
         if offsetY > contentHeight - height {
-            guard hasMoreFollowers, !isLoadingMoreFollowers else { return }
+            guard hasMoreFollowers, !isLoadingMoreFollowers, !isSearching else { return }
             page += 1
             getFollowers(for: username, page: page)
         }
