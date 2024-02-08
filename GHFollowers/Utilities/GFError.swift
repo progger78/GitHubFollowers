@@ -8,10 +8,10 @@
 import Foundation
 
 enum GFError: String, Error {
-    case invalidUsername    = "This username created an invalid request. Please try again"
-    case unableToComplete   = "Could complete your request. Please check your internet connection"
-    case invalidResponse    = "Invalid response from the server. Please try again."
-    case invalidData        = "Data recieved from the server is invalid. Please try again"
-    case unableToFavorite   = "Could not favorite the user. Please try later"
-    case alreayInFavorites  = "You've already favorited this user. Keep moving to others"
+    case invalidUsername    = "Неверное имя пользователя. Попробуйте ввести другое"
+    case unableToComplete   = "Не получилось выполнить запрос. Проверьте интернет-соединение"
+    case invalidResponse    = "Некорректный ответ от сервера. Попробуйте позже."
+    case invalidData        = "Некорректные данные с сервера. Попробуйте позже"
+    case unableToFavorite   = "Не получилось добавить в избранное. Попробуйте позже"
+    case alreayInFavorites  = "Этот пользователь уже в избранных👌🏻"
 }
