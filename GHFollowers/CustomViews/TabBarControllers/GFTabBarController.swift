@@ -24,20 +24,20 @@ final class GFTabBarController: UITabBarController {
     }
     
     
-    private func createFavoritesNC() -> UINavigationController {
-        let favoritesVC = FavoritesVC()
-        favoritesVC.title = Strings.TabBarTitle.searchTitle
-        favoritesVC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
-        return UINavigationController(rootViewController: favoritesVC)
-        
-    }
-    
-    
     private func createSearchNC() -> UINavigationController {
         let searchVC = SearchVC()
         searchVC.title = Strings.TabBarTitle.searchTitle
-        searchVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 0)
+        searchVC.tabBarItem = UITabBarItem(title: "Поиск", image: SFSymbols.searchImage, tag: 0)
         return UINavigationController(rootViewController: searchVC)
+    }
+    
+    
+    private func createFavoritesNC() -> UINavigationController {
+        let favoritesVC = FavoritesVC()
+        favoritesVC.title = Strings.TabBarTitle.searchTitle
+        favoritesVC.tabBarItem = UITabBarItem(title: "Избранные", image: SFSymbols.favorites, tag: 1)
+        return UINavigationController(rootViewController: favoritesVC)
+        
     }
     
     
