@@ -69,14 +69,6 @@ enum Strings {
 }
 
 
-enum ScreenSize {
-    static let width = UIScreen.main.bounds.size.width
-    static let height = UIScreen.main.bounds.size.height
-    static let maxLength = max(ScreenSize.width, ScreenSize.height)
-    static let minLength = min(ScreenSize.width, ScreenSize.height)
-}
-
-
 enum Images {
     static let ghLogo =  UIImage(named: "gh-logo")
     static let placeHolder =  UIImage(named: "avatar-placeholder")
